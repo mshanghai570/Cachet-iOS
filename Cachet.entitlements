@@ -1,0 +1,32 @@
+// Cachet - Environment Configuration
+
+// This file contains environment variables and configuration for the Cachet iOS app
+
+// MARK: - App Configuration
+APP_DISPLAY_NAME = "Cachet"
+APP_BUNDLE_IDENTIFIER = "com.developer.cachet"
+APP_VERSION = "1.0.0"
+APP_BUILD = "1"
+
+// MARK: - Network Configuration
+API_TIMEOUT = 60.0 // seconds
+MAX_CONCURRENT_DOWNLOADS = 4
+DEFAULT_CONCURRENT_TASKS = 4
+
+// MARK: - Feature Flags
+ENABLE_BROWSER_TOOL = true
+ENABLE_CLOUD_SYNC = false
+ENABLE_ANALYTICS = false
+
+// MARK: - Performance Settings
+CHUNK_SIZE_LIMIT = 10485760 // 10MB per chunk
+MAX_CACHE_SIZE = 1073741824 // 1GB cache
+
+// MARK: - UI Configuration
+UI_REFRESH_INTERVAL = 0.5 // seconds
+MAX_VISIBLE_DOWNLOADS = 20
+
+// MARK: - Storage Configuration
+DOCUMENT_PICKER_ALLOWED_TYPES = ["public.movie", "public.video", "public.item"]
+CACHE_DIRECTORY = "Documents/CachetCache"
+DOWNLOAD_DIRECTORY = "Documents/Downloads"
