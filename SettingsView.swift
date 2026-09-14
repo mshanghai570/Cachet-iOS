@@ -2,11 +2,11 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
-    @State private var useBrowserTool = true
-    @State private var wifiOnly = false
-    @State private var simultaneousDownloads = 3
-    @State private var compatibilityLayer = true
-    @State private var macMode = false
+    @AppStorage("useBrowserTool") private var useBrowserTool = true
+    @AppStorage("wifiOnly") private var wifiOnly = false
+    @AppStorage("simultaneousDownloads") private var simultaneousDownloads = 3
+    @AppStorage("compatibilityLayer") private var compatibilityLayer = true
+    @AppStorage("macMode") private var macMode = false
     
     var body: some View {
         NavigationView {

@@ -16,6 +16,7 @@ final class DownloadManager: ObservableObject {
     private struct SpeedSample {
         var received: Int64
         var date: Date
+        var bytesPerSecond: Double
     }
     private var speedSamples: [UUID: SpeedSample] = [:]
 
@@ -164,14 +165,19 @@ final class DownloadManager: ObservableObject {
         if let previous = speedSamples[id] {
             let deltaTime = now.timeIntervalSince(previous.date)
             let deltaBytes = received - previous.received
-            if deltaTime >= 0.5, deltaBytes > 0 {
-                let bytesPerSecond = Double(deltaBytes) / deltaTime
-                item.speedString = Self.speedString(bytesPerSecond)
+            if deltaTime >= 0.1, deltaBytes > 0 {
+                let instantSpeed = Double(deltaBytes) / deltaTime
+                // Exponential moving average for smooth display
+                let alpha = 0.3
+                let smoothedSpeed = previous.bytesPerSecond > 0
+                    ? alpha * instantSpeed + (1 - alpha) * previous.bytesPerSecond
+                    : instantSpeed
+                item.speedString = Self.speedString(smoothedSpeed)
                 item.sizeString = Self.byteString(Double(received)) + " of " + Self.byteString(Double(total ?? received))
-                speedSamples[id] = SpeedSample(received: received, date: now)
+                speedSamples[id] = SpeedSample(received: received, date: now, bytesPerSecond: smoothedSpeed)
             }
         } else {
-            speedSamples[id] = SpeedSample(received: received, date: now)
+            speedSamples[id] = SpeedSample(received: received, date: now, bytesPerSecond: 0)
         }
 
         downloads[index] = item
@@ -312,7 +318,7 @@ final class DownloadManager: ObservableObject {
         let units = ["B", "KB", "MB", "GB", "TB"]
         var scaled = bytes
         var unit = 0
-        while scaled >= 1024, unit < units.count - 1 {
+        while scaled >= 900 && unit < units.count - 1 {
             scaled /= 1024
             unit += 1
         }

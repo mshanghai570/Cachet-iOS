@@ -68,7 +68,7 @@ final class MediaExtractor: NSObject, WKNavigationDelegate, WKScriptMessageHandl
 
         webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = self
-        webView.customUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
+        webView.customUserAgent = UserAgents.extractor
 
         return await withCheckedContinuation { continuation in
             self.continuation = continuation
@@ -110,6 +110,14 @@ final class MediaExtractor: NSObject, WKNavigationDelegate, WKScriptMessageHandl
             return
         }
         decisionHandler(.allow)
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        finish()
+    }
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        finish()
     }
 
     // MARK: - WKScriptMessageHandler

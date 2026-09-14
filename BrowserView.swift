@@ -64,6 +64,7 @@ struct BrowserView: View {
             .onAppear {
                 coordinator.setAdBlocking(enabled: adBlockingEnabled)
                 address = coordinator.address
+                coordinator.start()
             }
             .sheet(isPresented: $showingDownloads) {
                 StreamPickerView(candidates: coordinator.candidates) { candidate in

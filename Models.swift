@@ -1,5 +1,11 @@
 import Foundation
 
+enum UserAgents {
+    static let app = "Cachet/1.0"
+    static let browser = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1 Cachet/1.0"
+    static let extractor = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
+}
+
 enum DownloadStatus: String {
     case queued
     case extracting
@@ -66,12 +72,11 @@ struct MediaCandidateCatalog: Equatable {
     mutating func insert(_ candidate: MediaCandidate) {
         guard !candidates.contains(where: { $0.streamURL == candidate.streamURL }) else { return }
         candidates.append(candidate)
-        candidates.sort { lhs, rhs in
-            Self.rank(lhs) > Self.rank(rhs)
-        }
     }
 
-    var bestCandidate: MediaCandidate? { candidates.first }
+    var bestCandidate: MediaCandidate? {
+        candidates.sorted { Self.rank($0) > Self.rank($1) }.first
+    }
 
     private static func rank(_ candidate: MediaCandidate) -> Int {
         switch candidate.kind {
