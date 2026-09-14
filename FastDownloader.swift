@@ -2,18 +2,6 @@ import Foundation
 
 /// Downloads a file with real progress reporting via URLSession delegate.
 actor FastDownloader {
-    enum DownloadError: LocalizedError {
-        case invalidResponse
-        case failed(String)
-
-        var errorDescription: String? {
-            switch self {
-            case .invalidResponse: return "The server returned an invalid response."
-            case .failed(let message): return message
-            }
-        }
-    }
-
     private let request: DownloadRequest
     private let destination: URL
     private let fileManager = FileManager.default
